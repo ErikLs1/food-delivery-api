@@ -8,7 +8,7 @@ import java.util.List;
  * @param <T> The DTO that is used in service methods
  * @param <ID> The type of entity's identifier
  */
-public interface BasicService <T, ID> {
+public interface CRUDService<T, ID> {
 
     /**
      * Create new entity from the provided DTO.
