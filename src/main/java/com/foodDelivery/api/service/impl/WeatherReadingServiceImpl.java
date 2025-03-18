@@ -45,7 +45,7 @@ public class WeatherReadingServiceImpl implements WeatherReadingService {
             Observations observations = xmlMapper.readValue(responseXml, Observations.class);
             LocalDateTime observationTime = parseObservationTime(observations.getTimestamp());
 
-            List<String> wmoCodes = cityRepository.findAllWmoCOdes();
+            List<String> wmoCodes = cityRepository.findAllWmoCodes();
 
             observations.getStations().stream()
                     .filter(station -> wmoCodes.contains(station.getWmoCode()))
