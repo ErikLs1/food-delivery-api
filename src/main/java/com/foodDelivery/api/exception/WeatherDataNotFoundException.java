@@ -1,10 +1,15 @@
 package com.foodDelivery.api.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
-@ResponseStatus(HttpStatus.NOT_FOUND)
+/**
+ * Exception is thrown when WeatherData data cannot be found.
+ */
 public class WeatherDataNotFoundException extends RuntimeException {
+
+    /**
+     * A new WeatherDataNotFoundException with the specified detailed message.
+     *
+     * @param message the detail message.
+     */
     public WeatherDataNotFoundException(String message) {
         super(message);
     }

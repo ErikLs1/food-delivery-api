@@ -1,10 +1,14 @@
 package com.foodDelivery.api.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
-@ResponseStatus(HttpStatus.NOT_FOUND)
+/**
+ * Exception is thrown when City data cannot be found.
+ */
 public class CityNotFoundException extends RuntimeException {
+
+    /**
+     * A new CityNotFoundException with the specified detailed message.
+     * @param message the detail message.
+     */
     public CityNotFoundException(String message) {
         super(message);
     }

@@ -1,10 +1,15 @@
 package com.foodDelivery.api.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
-@ResponseStatus(HttpStatus.NOT_FOUND)
+/**
+ * Exception is thrown when BaseFee data cannot be found.
+ */
 public class BaseFeeNotFoundException extends RuntimeException {
+
+    /**
+     * A new BaseFeeNotFoundException with the specified detailed message.
+     *
+     * @param message the detail message.
+     */
     public BaseFeeNotFoundException(String message) {
         super(message);
     }
