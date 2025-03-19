@@ -1,11 +1,13 @@
 package com.foodDelivery.api.repository;
 
+import com.foodDelivery.api.model.City;
 import com.foodDelivery.api.model.WeatherData;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Repository interface to perform CRUD operation on WeatherData entities.
@@ -38,4 +40,6 @@ public interface WeatherDataRepository extends JpaRepository<WeatherData, Long> 
             String cityName,
             LocalDateTime observationTime
     );
+
+    List<WeatherData> city(City city);
 }

@@ -88,6 +88,10 @@ public class DeliveryFeeServiceImpl implements DeliveryFeeService {
         return deliveryFee + extraFee;
      }
 
+    public Double calculateDeliveryFee(String cityName, String vehicleType) {
+        return calculateDeliveryFee(cityName, vehicleType, null);
+    }
+
     /**
      * Retrieves the latest WeatherData for the given city.
      *
