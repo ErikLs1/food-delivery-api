@@ -12,6 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * Rest controller for managing BaseFee entities.
+ *
+ * <p>
+ *     Provides endpoints to create, update, retrieve and delete BaseFee.
+ * </p>
+ */
 @CrossOrigin(origins = "http://localhost:3000")
 @AllArgsConstructor
 @RestController

@@ -16,10 +16,18 @@ import org.springframework.web.client.RestTemplate;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementation of WeatherReadingService interface that fetches and processes weather data from external API.
+ *
+ * <p>
+ *     The service uses RestTemplate to retrieve XML data and XmlMapper to
+ *     deserialize the XML into Observations and Station objects. It then takes that information and
+ *     saves the WeatherData according to the city.
+ * </p>
+ */
 @Service
 public class WeatherReadingServiceImpl implements WeatherReadingService {
     private static final String OBSERVATIONS_URL = "https://www.ilmateenistus.ee/ilma_andmed/xml/observations.php";
@@ -37,6 +45,17 @@ public class WeatherReadingServiceImpl implements WeatherReadingService {
     }
 
 
+    /**
+     * Method scheduled to fetch weather data from the external API every 15 minutes.
+     *
+     * <p>
+     *     It retrieves the XML response from the weather API.
+     *     Deserializes the XML into Observations objects.
+     *     Parses the observation timestamp into a LocalDateTime.
+     *     Retrieves all WMO codes from the database and filters stations data by wmo code.
+     *     For each matching station it looks for the correct City and saves the WeatherData.
+     * </p>
+     */
     @Override
     @Scheduled(cron = "* 15 * * * *")
     public void readWeatherData() {
@@ -70,6 +89,16 @@ public class WeatherReadingServiceImpl implements WeatherReadingService {
         }
     }
 
+    /**
+     * Parses the observation timestamp from a String into a LocalDateTime.
+     *
+     *<p>
+     *     The timestamp is given in Unix epoch seconds.
+     *     It is converted into LocalDateTime using the Europe/Tallinn timezone.
+     *</p>
+     * @param timestamp the observation timestamp as string.
+     * @return the LocalDateTime.
+     */
     @Override
     public LocalDateTime parseObservationTime(String timestamp) {
         if (timestamp == null || timestamp.isEmpty()) {

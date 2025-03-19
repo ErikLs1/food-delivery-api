@@ -12,6 +12,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Implements the Conditions service interface.
+ *
+ * <p>
+ *     Provides basic CRUD operations.
+ * </p>
+ */
 @Service
 @AllArgsConstructor
 public class ConditionsServiceImpl implements ConditionsService {

@@ -17,6 +17,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementation of the DeliveryFeeService interface.
+ *
+ * <p>
+ *     The service implements business logic for calculating the total
+ *     delivery fee for the given city, vehicle type and observation time.
+ * </p>
+ */
 @Service
 @AllArgsConstructor
 public class DeliveryFeeServiceImpl implements DeliveryFeeService {
@@ -27,6 +35,21 @@ public class DeliveryFeeServiceImpl implements DeliveryFeeService {
     private final WeatherDataRepository weatherDataRepository;
 
 
+    /**
+     * Calculate the delivery fee based on the provided parameters.
+     *
+     * <p>
+     *     It retrieves the latest weather data for the give city or by observation time if it is provided.
+     *     Retrieves the base fee according to the city and vehicle used.
+     *     Calculates extra fee based on temperature, wind and weather conditions.
+     * </p>
+     *
+     * @param cityName the name of the city.
+     * @param vehicleType the type of the vehicle (e.g., BIKE, CAR)
+     * @param observationTime the observation time used in fee calculation;
+     *                        if null then the latest available data is returned.
+     * @return the total delivery fee.
+     */
     @Override
     public Double calculateDeliveryFee(String cityName, String vehicleType, LocalDateTime observationTime) {
         WeatherData weatherData = observationTime != null ?
@@ -65,11 +88,25 @@ public class DeliveryFeeServiceImpl implements DeliveryFeeService {
         return deliveryFee + extraFee;
      }
 
+    /**
+     * Retrieves the latest WeatherData for the given city.
+     *
+     * @param cityName the name of the city.
+     * @return the most recent WeatherData, or null if none was found.
+     */
     @Override
     public WeatherData getLatestWeatherData(String cityName) {
        return weatherDataRepository.findTopByCityCityNameOrderByObservationTimeDesc(cityName);
     }
 
+    /**
+     * Retrieves the latest WeatherData for the given city that has observation time less
+     * than or equal to the provided dateTime.
+     *
+     * @param cityName the name of the city.
+     * @param dateTime the upper bound of the observation time.
+     * @return matching WeatherData, or null if none was found.
+     */
     @Override
     public WeatherData getLatestWeatherDataForTime(String cityName, LocalDateTime dateTime) {
         return weatherDataRepository.findTopByCityCityNameAndObservationTimeLessThanEqualOrderByObservationTimeDesc(
@@ -78,6 +115,13 @@ public class DeliveryFeeServiceImpl implements DeliveryFeeService {
         );
     }
 
+    /**
+     * Retrieves the abe fee for the provided city and vehicle type.
+     *
+     * @param cityName the name of the city.
+     * @param vehicleType the type of the vehicle.
+     * @return the base fee value.
+     */
     @Override
     public Double getBaseFee(String cityName, String vehicleType) {
         VehicleType vehType = VehicleType.valueOf(vehicleType.toUpperCase());
@@ -90,6 +134,16 @@ public class DeliveryFeeServiceImpl implements DeliveryFeeService {
 
     }
 
+    /**
+     * Processes a list of Conditions to find the suitable fee.
+     *
+     * <p>
+     *     If usage of the vehicle is forbidden due to weather conditions the exception is thrown.
+     * </p>
+     *
+     * @param conditionsList a list of conditions.
+     * @return the extra fee.
+     */
     @Override
     public Double processConditions(List<Conditions> conditionsList) {
         Double sum = 0.00;

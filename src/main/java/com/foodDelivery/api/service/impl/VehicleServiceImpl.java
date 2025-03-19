@@ -13,6 +13,13 @@ import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+/**
+ * Implements the Vehicle service interface.
+ *
+ * <p>
+ *     Provides basic CRUD operations.
+ * </p>
+ */
 @Service
 @AllArgsConstructor
 public class VehicleServiceImpl implements VehicleService {
