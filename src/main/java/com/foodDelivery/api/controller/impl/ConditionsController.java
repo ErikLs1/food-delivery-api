@@ -53,6 +53,7 @@ public class ConditionsController implements CRUDController<ConditionsDTO, Long>
 
     @Override
     public ResponseEntity<String> delete(Long id) {
-        return null;
+        conditionsService.delete(id);
+        return ResponseEntity.ok("Conditions with id " + id + " was deleted!");
     }
 }
