@@ -174,5 +174,5 @@ VALUES
 INSERT INTO CONDITIONS(vehicle_id, condition_type, min_value, max_value, condition_fee, usage_forbidden)
 VALUES
     (3, 'WIND', 10, 20, 0.50, FALSE),
-    (3, 'WIND', 20.01, 99.99, 0.50, TRUE);
+    (3, 'WIND', 20.01, 99.99, 0.00, TRUE);
 

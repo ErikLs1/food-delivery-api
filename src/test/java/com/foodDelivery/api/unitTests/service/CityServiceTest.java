@@ -4,7 +4,6 @@ import com.foodDelivery.api.dto.CityDTO;
 import com.foodDelivery.api.exception.CityNotFoundException;
 import com.foodDelivery.api.mapper.CityMapper;
 import com.foodDelivery.api.model.City;
-import com.foodDelivery.api.model.enums.VehicleType;
 import com.foodDelivery.api.repository.CityRepository;
 import com.foodDelivery.api.service.impl.CityServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
