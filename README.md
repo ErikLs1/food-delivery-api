@@ -38,7 +38,7 @@ Below is the fee based on city and vehicle.
 {
     "cityName": "Tallinn",
     "vehicleType": "Scooter",
-    "observationTime": "2025-03-12T13:34:32" // optional
+    "observationTime": "2025-03-12T13:34:32 (Optional)"
 }
 ```
 
