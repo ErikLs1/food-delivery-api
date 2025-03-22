@@ -21,7 +21,9 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
+/**
+ * Unit tests for BaseFeeController that test REST endpoints.
+ */
 @WebMvcTest(BaseFeeController.class)
 public class BaseFeeControllerTest {
 
@@ -34,6 +36,11 @@ public class BaseFeeControllerTest {
     @MockitoBean
     private BaseFeeService baseFeeService;
 
+    /**
+     * Tests that when there is no base fee, controller returns empty JSON.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testGetAllBaseFees_Empty() throws Exception {
         when(baseFeeService.getAll()).thenReturn(Collections.emptyList());
@@ -43,6 +50,11 @@ public class BaseFeeControllerTest {
                 .andExpect(content().json("[]"));
     }
 
+    /**
+     * Tests that retrieving all base fees returns the expected list.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testGetAllBaseFees() throws Exception {
         BaseFeeDTO baseFeeDTO = new BaseFeeDTO(12L, 3L, 4L, 4.0);
@@ -56,6 +68,11 @@ public class BaseFeeControllerTest {
                 .andExpect(jsonPath("$[0].vehicleFee").value(4.0));
     }
 
+    /**
+     * Tests that a new base fee is created.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testCreateBaseFee() throws Exception {
         BaseFeeDTO request = new BaseFeeDTO(null, 2L, 3L, 3.0);
@@ -74,6 +91,11 @@ public class BaseFeeControllerTest {
 
     }
 
+    /**
+     * Tests retrieving a base fee by id.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testGetBaseFeeById() throws Exception {
         BaseFeeDTO baseFeeDTO = new BaseFeeDTO(10L, 2L, 3L, 3.0);
@@ -85,6 +107,11 @@ public class BaseFeeControllerTest {
                 .andExpect(jsonPath("$.vehicleFee").value(3.0));
     }
 
+    /**
+     * Tests updating an existing base fee.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testUpdateBaseFee() throws Exception{
         BaseFeeDTO requestDTO = new BaseFeeDTO(null, 2L, 3L, 4.0);
@@ -101,6 +128,11 @@ public class BaseFeeControllerTest {
 
     }
 
+    /**
+     * Tests that deleting a base fee returns a success message.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testDeleteBaseFee() throws Exception {
         mvc.perform(delete("/api/base-fee/2"))

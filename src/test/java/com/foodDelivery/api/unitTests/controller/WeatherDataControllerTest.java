@@ -23,6 +23,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
+/**
+ * Unit tests for WeatherDataController that test REST endpoints.
+ */
 @WebMvcTest(WeatherDataController.class)
 public class WeatherDataControllerTest {
 
@@ -35,6 +38,11 @@ public class WeatherDataControllerTest {
     @MockitoBean
     private WeatherDataService weatherDataService;
 
+    /**
+     * Tests that when there is no weather data, controller returns empty JSON.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testGetAllWeatherData_Empty() throws Exception {
         when(weatherDataService.getAll()).thenReturn(Collections.emptyList());
@@ -44,6 +52,11 @@ public class WeatherDataControllerTest {
                 .andExpect(content().json("[]"));
     }
 
+    /**
+     * Tests that retrieving all weather data returns the expected list.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testGetAllWeatherData() throws Exception {
         WeatherDataDTO weatherDataDTO = new WeatherDataDTO(
@@ -65,6 +78,11 @@ public class WeatherDataControllerTest {
                 .andExpect(jsonPath("$[0].weatherPhenomenon").value("Clear"));
     }
 
+    /**
+     * Tests that a new weather data is created.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testCreateWeatherData() throws Exception {
         WeatherDataDTO requestDTO = new WeatherDataDTO(
@@ -99,6 +117,11 @@ public class WeatherDataControllerTest {
 
     }
 
+    /**
+     * Tests retrieving a weather data by id.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testGetWeatherDataById() throws Exception {
         WeatherDataDTO weatherDataDTO = new WeatherDataDTO(
@@ -118,6 +141,11 @@ public class WeatherDataControllerTest {
                 .andExpect(jsonPath("$.weatherPhenomenon").value("Light snow shower"));
     }
 
+    /**
+     * Tests updating an existing weather data.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testUpdateWeatherData() throws Exception{
         WeatherDataDTO requestDTO = new WeatherDataDTO(
@@ -149,6 +177,11 @@ public class WeatherDataControllerTest {
     }
 
 
+    /**
+     * Tests that deleting a weather data returns a success message.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testDeleteWeatherData() throws Exception {
         mvc.perform(delete("/api/weather-data/33"))

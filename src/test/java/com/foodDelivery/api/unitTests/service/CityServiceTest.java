@@ -19,6 +19,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests to verify that the CRUD operations of the City service work as expected.
+ */
 @ExtendWith(MockitoExtension.class)
 public class CityServiceTest {
 
@@ -34,6 +37,9 @@ public class CityServiceTest {
     private City city;
     private CityDTO cityDTO;
 
+    /**
+     * Common data set up before each test.
+     */
     @BeforeEach
     public void setUp() {
         city = new City();
@@ -49,6 +55,14 @@ public class CityServiceTest {
         cityDTO.setWmoCode("26038");
     }
 
+    /**
+     * Tests that a new City can be created.
+     *
+     * <p>
+     *     It verifies that the mapper converts the DTO to an entity, the repository saves
+     *     the entity, and the response entity contains the correct data.
+     * </p>
+     */
     @Test
     void testCreatCity() {
         when(cityMapper.toEntity(cityDTO)).thenReturn(city);
@@ -64,6 +78,13 @@ public class CityServiceTest {
         verify(cityRepository, times(1)).save(city);
     }
 
+    /**
+     * Test that existing City can be updated.
+     *
+     * <p>
+     *     The test verifies that when City exists, after updating it returns updated DTO.
+     * </p>
+     */
     @Test
     void testUpdateCity() {
         when(cityRepository.findById(1L)).thenReturn(Optional.of(city));
@@ -90,6 +111,9 @@ public class CityServiceTest {
         verify(cityRepository, times(1)).save(city);
     }
 
+    /**
+     * Test that updating City that does not exist throws a {@link CityNotFoundException}.
+     */
     @Test
     void testUpdateCityNotFound() {
         when(cityRepository.findById(1L)).thenReturn(Optional.empty());
@@ -100,6 +124,13 @@ public class CityServiceTest {
         verify(cityRepository, never()).save(any(City.class));
     }
 
+    /**
+     * Tests that the City can be retrieved by the id.
+     *
+     * <p>
+     *     The test verifies that the service returns the correct DTO.
+     * </p>
+     */
     @Test
     void testGetCityById() {
         when(cityRepository.findById(1L)).thenReturn(Optional.of(city));
@@ -114,6 +145,9 @@ public class CityServiceTest {
         verify(cityRepository, times(1)).findById(1L);
     }
 
+    /**
+     * Test that retrieving City by id that does not exist throws a {@link CityNotFoundException}.
+     */
     @Test
     void testCityGetByIdNotFound() {
         when(cityRepository.findById(1L)).thenReturn(Optional.empty());
@@ -122,6 +156,13 @@ public class CityServiceTest {
         verify(cityRepository, times(1)).findById(1L);
     }
 
+    /**
+     * Tests that all Cities can be retrieved.
+     *
+     * <p>
+     *     Verifies that the service return a list of CityDTO.
+     * </p>
+     */
     @Test
     void testGetAllCities() {
         City city1 = new City();
@@ -149,6 +190,13 @@ public class CityServiceTest {
         verify(cityRepository, times(1)).findAll();
     }
 
+    /**
+     * Tests that City can be deleted.
+     *
+     * <p>
+     *     Verifies that deletion does not throw any exception and that repository method is called only once.
+     * </p>
+     */
     @Test
     void testDeleteCity() {
         when(cityRepository.existsById(1L)).thenReturn(true);
@@ -159,6 +207,9 @@ public class CityServiceTest {
         verify(cityRepository, times(1)).deleteById(1L);
     }
 
+    /**
+     * Tests that deleting City that does not exist throws {@link CityNotFoundException}.
+     */
     @Test
     void testDeleteCityNotFound() {
         when(cityRepository.existsById(1L)).thenReturn(false);

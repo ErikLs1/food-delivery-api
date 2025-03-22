@@ -29,8 +29,17 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
+/**
+ * Unit tests with focus on bike delivery fee calculation.
+ *
+ * <p>
+ *     It uses parameterized tests to check that the fee calculation is correct
+ *     under different conditions as well as check that exceptions work as intended.
+ * </p>
+ */
 @ExtendWith(MockitoExtension.class)
 public class BikeDeliveryFeeServiceTest {
+
     @Mock
     private BaseFeeRepository baseFeeRepository;
 
@@ -47,6 +56,9 @@ public class BikeDeliveryFeeServiceTest {
     private BaseFee baseFee;
     private LocalDateTime observationTime;
 
+    /**
+     * Common data set up before each test.
+     */
     @BeforeEach
     void setUp() {
         observationTime = LocalDateTime.now();
@@ -60,6 +72,12 @@ public class BikeDeliveryFeeServiceTest {
         baseFee.setVehicleFee(3.00);
     }
 
+    /**
+     * Test calculation of delivery for a bike when observations time is provided.
+     *
+     * @param cityName the city name.
+     * @param expectedFee the fee associated with the city.
+     */
     @ParameterizedTest
     @CsvSource({
             "Tallinn, 3.00",
@@ -86,6 +104,12 @@ public class BikeDeliveryFeeServiceTest {
         assertEquals(expectedFee, totalFee);
     }
 
+    /**
+     * Test calculation of delivery for a car when observations time is not provided.
+     *
+     * @param cityName the city name.
+     * @param expectedFee the fee associated with the city.
+     */
     @ParameterizedTest
     @CsvSource({
             "Tallinn, 3.00",
@@ -112,6 +136,12 @@ public class BikeDeliveryFeeServiceTest {
         assertEquals(expectedFee, totalFee);
     }
 
+    /**
+     * Test calculates the delivery fee for a bike based on wind conditions.
+     *
+     * @param windSpeed the speed of the wind.
+     * @param expectedWindFee the fee associated with the condition.
+     */
     @ParameterizedTest
     @CsvSource({
             "15.0, 0.5",
@@ -144,6 +174,9 @@ public class BikeDeliveryFeeServiceTest {
 
     }
 
+    /**
+     * Tests that exception is thrown when wind is too strong to use the bike.
+     */
     @Test
     void testCalculateDeliveryFeeForBike_WindTooStrong() {
         String cityName = "Tallinn";
@@ -168,6 +201,12 @@ public class BikeDeliveryFeeServiceTest {
                 () -> deliveryFeeService.calculateDeliveryFee(cityName, vehicleType));
     }
 
+    /**
+     * Test calculates a delivery fee for a bike when phenomenon is related to rain.
+     *
+     * @param phenomenon the phenomenon description.
+     * @param expectedFee the fee associated with the phenomenon.
+     */
     @ParameterizedTest
     @CsvSource({
             "Light shower, 0.50",
@@ -202,6 +241,12 @@ public class BikeDeliveryFeeServiceTest {
         assertEquals(3.00 + expectedFee, totalFee);
     }
 
+    /**
+     * Test calculates delivery fee for a bike when phenomenon is related to snow/sleet.
+     *
+     * @param phenomenon the phenomenon description.
+     * @param expectedFee the fee associated with the phenomenon.
+     */
     @ParameterizedTest
     @CsvSource({
             "Light snow shower, 1.00",
@@ -238,7 +283,12 @@ public class BikeDeliveryFeeServiceTest {
         assertEquals(3.00 + expectedFee, totalFee);
     }
 
-    // Air temperature and fee
+    /**
+     * Test calculates delivery fee for a bike when air temperature is provided.
+     *
+     * @param airTemperature the air temperature.
+     * @param expectedFee the fee associated with the temperature condition.
+     */
     @ParameterizedTest
     @CsvSource({
             "-13.0, 1.00",
@@ -273,6 +323,11 @@ public class BikeDeliveryFeeServiceTest {
         assertEquals(3.00 + expectedFee, totalFee);
     }
 
+    /**
+     * Tests that exception is thrown when weather conditions forbid bike usage.
+     *
+     * @param phenomenon the phenomenon description.
+     */
     @ParameterizedTest
     @ValueSource(strings = {"Glaze", "Hail", "Thunder"})
     void testCalculateDeliveryFeeForScooter_WhereUsageForbidden(String phenomenon) {
@@ -302,10 +357,18 @@ public class BikeDeliveryFeeServiceTest {
                 deliveryFeeService.calculateDeliveryFee(cityName, vehicleType));
     }
 
-
+    /**
+     * Tests the delivery fee calculation when temperature, wind and phenomenon are provided.
+     *
+     * @param airTemperature the air temperature.
+     * @param phenomenon the phenomenon description.
+     * @param windSpeed the wind speed.
+     * @param expectedTempFee the fee associated with the temperature
+     * @param expectedPhenomenonFee the fee associated with the phenomenon.
+     * @param expectedWindFee the fee associated with the wind
+     */
     @ParameterizedTest
     @CsvSource({
-            // airTemp, phenomenon, windSpeed, expectedTemFee, expectedPhenomenonFee, expectedWindFee
             "-12.0, 'Light snow shower', 12.0, 1.00, 1.00, 0.50",
             "-6.0, 'Light rain', 8.0, 0.50, 0.50, 0.00",
             "5.0, 'Clear', 9.0, 0.00, 0.00, 0.00",
@@ -355,6 +418,9 @@ public class BikeDeliveryFeeServiceTest {
         assertEquals(expectedTotalFee, totalFee);
     }
 
+    /**
+     * Tests that {@link WeatherDataNotFoundException} is thrown when weather data was not found.
+     */
     @Test
     void testCalculateDeliveryFeeForBike_NoWeatherData() {
         String cityName = "Tallinn";

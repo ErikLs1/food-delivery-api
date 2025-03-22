@@ -22,6 +22,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests to verify that the CRUD operations of the BaseFee service work as expected.
+ */
 @ExtendWith(MockitoExtension.class)
 public class BaseFeeServiceTest {
 
@@ -37,6 +40,9 @@ public class BaseFeeServiceTest {
     private BaseFee baseFee;
     private BaseFeeDTO baseFeeDTO;
 
+    /**
+     * Common data set up before each test.
+     */
     @BeforeEach
     void setUp() {
         City city = new City();
@@ -62,6 +68,14 @@ public class BaseFeeServiceTest {
         baseFeeDTO.setVehicleId(6L);
     }
 
+    /**
+     * Tests that a new BaseFee can be created.
+     *
+     * <p>
+     *     It verifies that the mapper converts the DTO to an entity, the repository saves
+     *     the entity, and the response entity contains the correct data.
+     * </p>
+     */
     @Test
     void testCrateBaseFee() {
         when(baseFeeMapper.toEntity(baseFeeDTO)).thenReturn(baseFee);
@@ -77,6 +91,13 @@ public class BaseFeeServiceTest {
         verify(baseFeeRepository, times(1)).save(baseFee);
     }
 
+    /**
+     * Test that existing BaseFee can be updated.
+     *
+     * <p>
+     *     The test verifies that when BaseFee exists, after updating it returns updated DTO.
+     * </p>
+     */
     @Test
     void testUpdateBaseFee() {
         when(baseFeeRepository.findById(1L)).thenReturn(Optional.of(baseFee));
@@ -101,6 +122,9 @@ public class BaseFeeServiceTest {
         verify(baseFeeRepository, times(1)).save(baseFee);
     }
 
+    /**
+     * Test that updating BaseFee that does not exist throws a {@link BaseFeeNotFoundException}.
+     */
     @Test
     void testUpdateBaseFeeNotFound() {
         when(baseFeeRepository.findById(1L)).thenReturn(Optional.empty());
@@ -110,6 +134,13 @@ public class BaseFeeServiceTest {
         verify(baseFeeRepository, never()).save(any(BaseFee.class));
     }
 
+    /**
+     * Tests that the BaseFee can be retrieved by the id.
+     *
+     * <p>
+     *     The test verifies that the service returns the correct DTO.
+     * </p>
+     */
     @Test
     void testGetBaseFeeById() {
         when(baseFeeRepository.findById(1L)).thenReturn(Optional.of(baseFee));
@@ -123,6 +154,9 @@ public class BaseFeeServiceTest {
         verify(baseFeeRepository, times(1)).findById(1L);
     }
 
+    /**
+     * Test that retrieving BaseFee by id that does not exist throws a {@link BaseFeeNotFoundException}.
+     */
     @Test
     void testGetBaseFeeByIdNotFound() {
         when(baseFeeRepository.findById(1L)).thenReturn(Optional.empty());
@@ -131,6 +165,13 @@ public class BaseFeeServiceTest {
         verify(baseFeeRepository, times(1)).findById(1L);
     }
 
+    /**
+     * Tests that all BaseFees can be retrieved.
+     *
+     * <p>
+     *     Verifies that the service return a list of BaseFeeDTO.
+     * </p>
+     */
     @Test
     void testGetAllBaseFees() {
         List<BaseFee> baseFees = List.of(baseFee);
@@ -144,6 +185,13 @@ public class BaseFeeServiceTest {
         verify(baseFeeRepository, times(1)).findAll();
     }
 
+    /**
+     * Tests that BaseFee can be deleted.
+     *
+     * <p>
+     *     Verifies that deletion does not throw any exception and that repository method is called only once.
+     * </p>
+     */
     @Test
     void testDeleteBaseFee() {
         when(baseFeeRepository.existsById(1L)).thenReturn(true);
@@ -154,6 +202,9 @@ public class BaseFeeServiceTest {
         verify(baseFeeRepository, times(1)).deleteById(1L);
     }
 
+    /**
+     * Tests that deleting BaseFee that does not exist throws {@link BaseFeeNotFoundException}.
+     */
     @Test
     void testDeleteBaseFeeNotFound() {
         when(baseFeeRepository.existsById(1L)).thenReturn(false);

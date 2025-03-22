@@ -22,6 +22,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests to verify that the CRUD operations of the WeatherData service work as expected.
+ */
 @ExtendWith(MockitoExtension.class)
 public class WeatherDataServiceTest {
 
@@ -38,6 +41,9 @@ public class WeatherDataServiceTest {
     private WeatherDataDTO weatherDataDTO;
     private LocalDateTime dateTime;
 
+    /**
+     * Common data set up before each test.
+     */
     @BeforeEach
     void setUp() {
         dateTime = LocalDateTime.now();
@@ -56,6 +62,14 @@ public class WeatherDataServiceTest {
         weatherDataDTO.setObservationTime(dateTime);
     }
 
+    /**
+     * Tests that a new WeatherData can be created.
+     *
+     * <p>
+     *     It verifies that the mapper converts the DTO to an entity, the repository saves
+     *     the entity, and the response entity contains the correct data.
+     * </p>
+     */
     @Test
     void testCreatWeatherData() {
         when(weatherDataMapper.toEntity(weatherDataDTO)).thenReturn(weatherData);
@@ -72,6 +86,13 @@ public class WeatherDataServiceTest {
         verify(weatherDataRepository, times(1)).save(weatherData);
     }
 
+    /**
+     * Test that existing WeatherData can be updated.
+     *
+     * <p>
+     *     The test verifies that when WeatherData exists, after updating it returns updated DTO.
+     * </p>
+     */
     @Test
     void testUpdateWeatherData() {
         when(weatherDataRepository.findById(1L)).thenReturn(Optional.of(weatherData));
@@ -110,6 +131,9 @@ public class WeatherDataServiceTest {
         verify(weatherDataRepository, times(1)).save(weatherData);
     }
 
+    /**
+     * Test that updating WeatherData that does not exist throws a {@link WeatherDataNotFoundException}.
+     */
     @Test
     void testUpdateWeatherDataNotFound() {
         when(weatherDataRepository.findById(1L)).thenReturn(Optional.empty());
@@ -124,6 +148,13 @@ public class WeatherDataServiceTest {
         verify(weatherDataRepository, never()).save(any(WeatherData.class));
     }
 
+    /**
+     * Tests that the WeatherData can be retrieved by the id.
+     *
+     * <p>
+     *     The test verifies that the service returns the correct DTO.
+     * </p>
+     */
     @Test
     void testGeWeatherDataById() {
         when(weatherDataRepository.findById(1L)).thenReturn(Optional.of(weatherData));
@@ -136,6 +167,9 @@ public class WeatherDataServiceTest {
         verify(weatherDataRepository, times(1)).findById(1L);
     }
 
+    /**
+     * Test that retrieving WeatherData by id that does not exist throws a {@link WeatherDataNotFoundException}.
+     */
     @Test
     void testGetWeatherDataByIdWasNotFound() {
         when(weatherDataRepository.findById(1L)).thenReturn(Optional.empty());
@@ -143,6 +177,13 @@ public class WeatherDataServiceTest {
         verify(weatherDataRepository, times(1)).findById(1L);
     }
 
+    /**
+     * Tests that all WeatherData can be retrieved.
+     *
+     * <p>
+     *     Verifies that the service return a list of WeatherDataDTO.
+     * </p>
+     */
     @Test
     void testGetAllWeatherData() {
         WeatherData weatherData2 = new WeatherData();
@@ -174,6 +215,13 @@ public class WeatherDataServiceTest {
         verify(weatherDataMapper, times(2)).toDTO(any(WeatherData.class));
     }
 
+    /**
+     * Tests that WeatherData can be deleted.
+     *
+     * <p>
+     *     Verifies that deletion does not throw any exception and that repository method is called only once.
+     * </p>
+     */
     @Test
     void testDeleteWeatherData() {
         when(weatherDataRepository.existsById(1L)).thenReturn(true);
@@ -185,6 +233,9 @@ public class WeatherDataServiceTest {
 
     }
 
+    /**
+     * Tests that deleting WeatherData that does not exist throws {@link WeatherDataNotFoundException}.
+     */
     @Test
     void testDeleteWeatherDataNotFound() {
         when(weatherDataRepository.existsById(1L)).thenReturn(false);

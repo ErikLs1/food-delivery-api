@@ -51,8 +51,9 @@ Below is the fee based on city and vehicle.
 
 ## Business Rules Controllers
 ### 1. **BaseFeeControllers**
+#### Create a Base Fee
 **Endpoint**: `/api/base-fee`  
-**Method**: `POST - Create`  
+**Method**: `POST`  
 **Request Body**: `BaseFeeDTO`
 
 ```json
@@ -62,8 +63,10 @@ Below is the fee based on city and vehicle.
     "vehicleFee": 3.50
 }
 ```
+---
+#### Update a Base Fee
 **Endpoint**: `/api/base-fee/{id}`  
-**Method**: `PUT - Update`  
+**Method**: `PUT`  
 **Request Body**: `BaseFeeDTO`
 
 ```json
@@ -74,17 +77,158 @@ Below is the fee based on city and vehicle.
 }
 ```
 ---
+#### Get Base Fee by ID
 **Endpoint**: `/api/base-fee/{id}`  
-**Method**: `GET - Get By Id`  
-**Request Body**: `BaseFeeDTO`
+**Method**: `GET`  
+**Response**: `BaseFeeDTO`
 ---
+#### Get All Base Fees
 **Endpoint**: `/api/base-fee`  
-**Method**: `GET - Get All`  
-**Request Body**: `BaseFeeDTO`
+**Method**: `GET`  
+**Response**: List of `BaseFeeDTO`
 ---
+#### Delete Base Fee by ID
 **Endpoint**: `/api/base-fee/{id}`  
-**Method**: `DELETE - Delete`  
-**Request Body**: `BaseFeeDTO`
+**Method**: `DELETE`  
+---
+### 2. **CityControllers**
+#### Create a City
+**Endpoint**: `/api/city`  
+**Method**: `POST`  
+**Request Body**: `CityDTO`
+
+```json
+{
+    "cityId": 1,
+    "vehicleId": 2,
+    "vehicleFee": 3.50
+}
+```
+---
+#### Update a City
+**Endpoint**: `/api/city/{id}`  
+**Method**: `PUT`  
+**Request Body**: `CityDTO`
+
+```json
+{
+    "cityId": 1,
+    "vehicleId": 2,
+    "vehicleFee": 5.00
+}
+```
+---
+#### Get City by ID
+**Endpoint**: `/api/city/{id}`  
+**Method**: `GET`  
+**Response**: `CityDTO`
+---
+#### Get All Cities
+**Endpoint**: `/api/city`  
+**Method**: `GET`  
+**Response**: List of `CityDTO`
+---
+#### Delete City by ID
+**Endpoint**: `/api/city/{id}`  
+**Method**: `DELETE`  
+---
+### 3. **ConditionsControllers**
+#### Create a Condition
+**Endpoint**: `/api/conditions`  
+**Method**: `POST`  
+**Request Body**: `ConditionsDTO`
+
+```json
+{
+    "vehicleId": 1,
+    "conditionType": "TEMPERATURE",
+    "minValue": -10.00,
+    "maxValue": 0.00,
+    "phenomenon": "OPTIONAL",
+    "conditionFee": 1.00,
+    "usageForbidden": false
+}
+```
+**or**
+```json
+{
+  "vehicleId": 1,
+  "conditionType": "PHENOMENON",
+  "minValue": "OPTIONAL",
+  "maxValue": "OPTIONAL",
+  "phenomenon": "Light snow shower",
+  "conditionFee": 1.00,
+  "usageForbidden": false
+}
+```
+---
+#### Update a Condition
+**Endpoint**: `/api/conditions/{id}`  
+**Method**: `PUT`  
+**Request Body**: `ConditionsDTO`
+
+```json
+{
+  "vehicleId": 1,
+  "conditionType": "TEMPERATURE",
+  "minValue": -99.00,
+  "maxValue": -10.01,
+  "phenomenon": "OPTIONAL",
+  "conditionFee": 0.00,
+  "usageForbidden": true
+}
+```
+---
+#### Get Condition by ID
+**Endpoint**: `/api/conditions/{id}`  
+**Method**: `GET`  
+**Response**: `ConditionsDTO`
+---
+#### Get All Conditions
+**Endpoint**: `/api/conditions`  
+**Method**: `GET`  
+**Response**: List of `ConditionsDTO`
+---
+#### Delete Conditions by ID
+**Endpoint**: `/api/conditions/{id}`  
+**Method**: `DELETE`
+---
+### 4. **VehicleControllers**
+#### Create a Vehicle
+**Endpoint**: `/api/vehicle`  
+**Method**: `POST`  
+**Request Body**: `VehicleDTO`
+
+```json
+{
+  "vehicleType": "SCOOTER"
+}
+```
+---
+#### Update a Vehicle
+**Endpoint**: `/api/vehicle/{id}`  
+**Method**: `PUT`  
+**Request Body**: `VehicleDTO`
+
+```json
+{
+  "vehicleType": "CAR"
+}
+```
+---
+#### Get Vehicle by ID
+**Endpoint**: `/api/vehicle/{id}`  
+**Method**: `GET`  
+**Response**: `VehicleDTO`
+---
+#### Get All Vehicles
+**Endpoint**: `/api/vehicle`  
+**Method**: `GET`  
+**Response**: List of `VehicleDTO`
+---
+#### Delete Vehicle by ID
+**Endpoint**: `/api/vehicle/{id}`  
+**Method**: `DELETE`
 ---
 
 

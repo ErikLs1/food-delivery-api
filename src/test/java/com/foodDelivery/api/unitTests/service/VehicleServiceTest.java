@@ -20,6 +20,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests to verify that the CRUD operations of the Vehicle service work as expected.
+ */
 @ExtendWith(MockitoExtension.class)
 public class VehicleServiceTest {
 
@@ -35,6 +38,9 @@ public class VehicleServiceTest {
     private Vehicle vehicle;
     private VehicleDTO vehicleDTO;
 
+    /**
+     * Common data set up before each test.
+     */
     @BeforeEach
     void setUp() {
         vehicle = new Vehicle();
@@ -46,6 +52,14 @@ public class VehicleServiceTest {
         vehicleDTO.setVehicleType(VehicleType.BIKE);
     }
 
+    /**
+     * Tests that a new Vehicle can be created.
+     *
+     * <p>
+     *     It verifies that the mapper converts the DTO to an entity, the repository saves
+     *     the entity, and the response entity contains the correct data.
+     * </p>
+     */
     @Test
     void testCreatVehicle() {
         when(vehicleMapper.toEntity(vehicleDTO)).thenReturn(vehicle);
@@ -59,6 +73,13 @@ public class VehicleServiceTest {
         verify(vehicleRepository, times(1)).save(vehicle);
     }
 
+    /**
+     * Test that existing Vehicle can be updated.
+     *
+     * <p>
+     *     The test verifies that when Vehicle exists, after updating it returns updated DTO.
+     * </p>
+     */
     @Test
     void testUpdateVehicle() {
         when(vehicleRepository.findById(1L)).thenReturn(Optional.of(vehicle));
@@ -82,6 +103,9 @@ public class VehicleServiceTest {
         verify(vehicleRepository, times(1)).save(vehicle);
     }
 
+    /**
+     * Test that updating Vehicle that does not exist throws a {@link VehicleNotFoundException}.
+     */
     @Test
     void testUpdateVehicleNotFound() {
         when(vehicleRepository.findById(1L)).thenReturn(Optional.empty());
@@ -92,6 +116,14 @@ public class VehicleServiceTest {
         verify(vehicleRepository, never()).save(any(Vehicle.class));
     }
 
+
+    /**
+     * Tests that the Vehicle can be retrieved by the id.
+     *
+     * <p>
+     *     The test verifies that the service returns the correct DTO.
+     * </p>
+     */
     @Test
     void testGetVehicleById() {
         when(vehicleRepository.findById(1L)).thenReturn(Optional.of(vehicle));
@@ -104,6 +136,9 @@ public class VehicleServiceTest {
         verify(vehicleRepository, times(1)).findById(1L);
     }
 
+    /**
+     * Test that retrieving Vehicle by id that does not exist throws a {@link VehicleNotFoundException}.
+     */
     @Test
     void testGetVehicleByIdWasNotFound() {
         when(vehicleRepository.findById(1L)).thenReturn(Optional.empty());
@@ -112,6 +147,13 @@ public class VehicleServiceTest {
         verify(vehicleRepository, times(1)).findById(1L);
     }
 
+    /**
+     * Tests that all Vehicles can be retrieved.
+     *
+     * <p>
+     *     Verifies that the service return a list of VehicleDTO.
+     * </p>
+     */
     @Test
     void testGetAllVehicles() {
         Vehicle vehicle1 = new Vehicle();
@@ -138,6 +180,13 @@ public class VehicleServiceTest {
         verify(vehicleMapper, times(2)).toDTO(any());
     }
 
+    /**
+     * Tests that Vehicle can be deleted.
+     *
+     * <p>
+     *     Verifies that deletion does not throw any exception and that repository method is called only once.
+     * </p>
+     */
     @Test
     void testDeleteVehicle() {
         when(vehicleRepository.existsById(1L)).thenReturn(true);
@@ -149,6 +198,9 @@ public class VehicleServiceTest {
 
     }
 
+    /**
+     * Tests that deleting Vehicle that does not exist throws {@link VehicleNotFoundException}.
+     */
     @Test
     void testDeleteVehicleNotFound() {
         when(vehicleRepository.existsById(1L)).thenReturn(false);

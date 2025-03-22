@@ -22,6 +22,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
+/**
+ * Unit tests for CityController that test REST endpoints.
+ */
 @WebMvcTest(CityController.class)
 public class CityControllerTest {
 
@@ -34,6 +37,11 @@ public class CityControllerTest {
     @MockitoBean
     private CityService cityService;
 
+    /**
+     * Tests that when there is no cities, controller returns empty JSON.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testGetAllCities_Empty() throws Exception {
         when(cityService.getAll()).thenReturn(Collections.emptyList());
@@ -43,6 +51,11 @@ public class CityControllerTest {
                 .andExpect(content().json("[]"));
     }
 
+    /**
+     * Tests that retrieving all cities returns the expected list.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testGetAllCities() throws Exception {
         CityDTO cityDTO = new CityDTO(1L, "Tallinn", "Tallinn-Harku", "26038");
@@ -54,6 +67,11 @@ public class CityControllerTest {
                 .andExpect(jsonPath("$[0].cityName").value("Tallinn"));
     }
 
+    /**
+     * Tests that a new city is created.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testCreateCity() throws Exception {
         CityDTO requestDTO = new CityDTO(null, "Pärnu", "Parnu", "41803");
@@ -70,6 +88,11 @@ public class CityControllerTest {
 
     }
 
+    /**
+     * Tests retrieving a city by id.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testGetCityById() throws Exception {
         CityDTO cityDTO = new CityDTO(3L, "Tartu", "Tartu-Tõravere", "26242");
@@ -81,6 +104,11 @@ public class CityControllerTest {
                 .andExpect(jsonPath("$.wmoCode").value("26242"));
     }
 
+    /**
+     * Tests updating an existing city.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testUpdateCity() throws Exception{
         CityDTO requestDTO = new CityDTO(null, "Tartu Something", "Tartu-Tõravere", "26242");
@@ -96,7 +124,11 @@ public class CityControllerTest {
                 .andExpect(jsonPath("$.cityName").value("Tartu Something"));
     }
 
-
+    /**
+     * Tests that deleting a city returns a success message.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testDeleteCity() throws Exception {
         mvc.perform(delete("/api/city/77"))

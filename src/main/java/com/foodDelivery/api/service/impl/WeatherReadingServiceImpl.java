@@ -57,7 +57,7 @@ public class WeatherReadingServiceImpl implements WeatherReadingService {
      * </p>
      */
     @Override
-    @Scheduled(cron = "* 15 * * * *")
+    @Scheduled(cron = "0 15 * * * *")
     public void readWeatherData() {
         try {
             String responseXml = restTemplate.getForObject(OBSERVATIONS_URL, String.class);

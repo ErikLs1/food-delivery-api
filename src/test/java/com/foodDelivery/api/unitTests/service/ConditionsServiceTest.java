@@ -22,6 +22,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests to verify that the CRUD operations of the Conditions service work as expected.
+ */
 @ExtendWith(MockitoExtension.class)
 public class ConditionsServiceTest {
 
@@ -38,6 +41,9 @@ public class ConditionsServiceTest {
     private ConditionsDTO conditionsDTO;
     private Vehicle vehicle;
 
+    /**
+     * Common data set up before each test.
+     */
     @BeforeEach
     void setUp() {
         vehicle = new Vehicle();
@@ -65,6 +71,14 @@ public class ConditionsServiceTest {
         conditionsDTO.setUsageForbidden(false);
     }
 
+    /**
+     * Tests that a new Condition can be created.
+     *
+     * <p>
+     *     It verifies that the mapper converts the DTO to an entity, the repository saves
+     *     the entity, and the response entity contains the correct data.
+     * </p>
+     */
     @Test
     void testCreateConditions() {
         when(conditionsMapper.toEntity(conditionsDTO)).thenReturn(conditions);
@@ -79,6 +93,13 @@ public class ConditionsServiceTest {
         verify(conditionsRepository, times(1)).save(conditions);
     }
 
+    /**
+     * Test that existing Condition can be updated.
+     *
+     * <p>
+     *     The test verifies that when Condition exists, after updating it returns updated DTO.
+     * </p>
+     */
     @Test
     void testUpdateConditions() {
         when(conditionsRepository.findById(1L)).thenReturn(Optional.of(conditions));
@@ -111,6 +132,9 @@ public class ConditionsServiceTest {
         verify(conditionsRepository, times(1)).save(conditions);
     }
 
+    /**
+     * Test that updating Condition that does not exist throws a {@link ConditionNotFoundException}.
+     */
     @Test
     void testUpdateConditionsNotFound() {
         when(conditionsRepository.findById(1L)).thenReturn(Optional.empty());
@@ -122,6 +146,13 @@ public class ConditionsServiceTest {
         verify(conditionsRepository, never()).save(any(Conditions.class));
     }
 
+    /**
+     * Tests that the Condition can be retrieved by the id.
+     *
+     * <p>
+     *     The test verifies that the service returns the correct DTO.
+     * </p>
+     */
     @Test
     void testGetConditionsById() {
         when(conditionsRepository.findById(1L)).thenReturn(Optional.of(conditions));
@@ -136,6 +167,9 @@ public class ConditionsServiceTest {
         verify(conditionsRepository, times(1)).findById(1L);
     }
 
+    /**
+     * Test that retrieving Condition by id that does not exist throws a {@link ConditionNotFoundException}.
+     */
     @Test
     void testGetConditionsByIdNotFound() {
         when(conditionsRepository.findById(1L)).thenReturn(Optional.empty());
@@ -143,6 +177,13 @@ public class ConditionsServiceTest {
         verify(conditionsRepository, times(1)).findById(1L);
     }
 
+    /**
+     * Tests that all Condition can be retrieved.
+     *
+     * <p>
+     *     Verifies that the service return a list of ConditionsDTO.
+     * </p>
+     */
     @Test
     void testGetAllConditions() {
         List<Conditions> conditionsList = List.of(conditions);
@@ -156,6 +197,13 @@ public class ConditionsServiceTest {
         verify(conditionsRepository, times(1)).findAll();
     }
 
+    /**
+     * Tests that Conditions can be deleted.
+     *
+     * <p>
+     *     Verifies that deletion does not throw any exception and that repository method is called only once.
+     * </p>
+     */
     @Test
     void testDeleteConditions() {
         when(conditionsRepository.existsById(1L)).thenReturn(true);
@@ -166,6 +214,9 @@ public class ConditionsServiceTest {
         verify(conditionsRepository, times(1)).deleteById(1L);
     }
 
+    /**
+     * Tests that deleting Condition that does not exist throws {@link ConditionNotFoundException}.
+     */
     @Test
     void testDeleteConditionsNotFound() {
         when(conditionsRepository.existsById(1L)).thenReturn(false);

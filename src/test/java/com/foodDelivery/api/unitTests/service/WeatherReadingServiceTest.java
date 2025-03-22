@@ -1,47 +1,27 @@
 package com.foodDelivery.api.unitTests.service;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.foodDelivery.api.model.WeatherData;
-import com.foodDelivery.api.repository.CityRepository;
-import com.foodDelivery.api.repository.WeatherDataRepository;
-import com.foodDelivery.api.service.impl.WeatherReadingServiceImpl;
 import com.foodDelivery.api.xml.Observations;
 import com.foodDelivery.api.xml.Station;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
 
+
+/**
+ * Unit tests for parsing the XML weather data.
+ */
 @ExtendWith(MockitoExtension.class)
 public class WeatherReadingServiceTest {
 
-    @Mock
-    private CityRepository cityRepository;
-
-    @Mock
-    private WeatherDataRepository weatherDataRepository;
-
-    @Mock
-    private RestTemplate restTemplate;
-
-    @Mock
-    private XmlMapper xmlMapper;
-
-    @InjectMocks
-    private WeatherReadingServiceImpl weatherReadingService;
-
-
+    /**
+     * Tests XML weather data parsing for one station.
+     *
+     * @throws Exception if XML parsing fails.
+     */
     @Test
     void testWeatherDataParsingForOneStation() throws Exception {
         String xml = """
@@ -69,8 +49,28 @@ public class WeatherReadingServiceTest {
                     </station>
                 </observations>
                 """;
+        XmlMapper xmlMapper = new XmlMapper();
+        Observations observations = xmlMapper.readValue(xml, Observations.class);
+
+        assertNotNull(observations);
+        assertEquals("1742472839", observations.getTimestamp());
+
+        assertNotNull(observations.getStations());
+        assertEquals(1, observations.getStations().size());
+
+        Station station1 = observations.getStations().getFirst();
+        assertEquals("Tallinn-Harku", station1.getName());
+        assertEquals("26038", station1.getWmoCode());
+        assertEquals(3.6, station1.getAirTemperature());
+        assertEquals(4.8, station1.getWindSpeed());
+        assertEquals("Cloudy with clear spells", station1.getPhenomenon());
     }
 
+    /**
+     * Tests XML weather data parsing for multiple stations.
+     *
+     * @throws Exception if XML parsing fails.
+     */
     @Test
     void testWeatherDataParsingForMultipleStations() throws Exception {
         String xml = """

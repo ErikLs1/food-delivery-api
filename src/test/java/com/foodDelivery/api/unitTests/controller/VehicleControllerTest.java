@@ -23,6 +23,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
+/**
+ * Unit tests for VehicleController that test REST endpoints.
+ */
 @WebMvcTest(VehicleController.class)
 public class VehicleControllerTest {
 
@@ -35,6 +38,11 @@ public class VehicleControllerTest {
     @MockitoBean
     private VehicleService vehicleService;
 
+    /**
+     * Tests that when there is no vehicle, controller returns empty JSON.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testGetAllVehicles_Empty() throws Exception {
         when(vehicleService.getAll()).thenReturn(Collections.emptyList());
@@ -44,6 +52,11 @@ public class VehicleControllerTest {
                 .andExpect(content().json("[]"));
     }
 
+    /**
+     * Tests that retrieving all vehicle returns the expected list.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testGetAllVehicles() throws Exception {
         VehicleDTO vehicleDTO = new VehicleDTO(1L, VehicleType.CAR);
@@ -55,6 +68,11 @@ public class VehicleControllerTest {
                 .andExpect(jsonPath("$[0].vehicleType").value("CAR"));
     }
 
+    /**
+     * Tests that a new vehicle is created.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testCreateVehicles() throws Exception {
         VehicleDTO requestDTO = new VehicleDTO(null, VehicleType.SCOOTER);
@@ -71,6 +89,11 @@ public class VehicleControllerTest {
 
     }
 
+    /**
+     * Tests retrieving a vehicle by id.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testGetVehicleById() throws Exception {
         VehicleDTO vehicleDTO = new VehicleDTO(22L, VehicleType.BIKE);
@@ -82,6 +105,11 @@ public class VehicleControllerTest {
                 .andExpect(jsonPath("$.vehicleType").value("BIKE"));
     }
 
+    /**
+     * Tests updating an existing vehicle.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testUpdateVehicle() throws Exception{
         VehicleDTO requestDTO = new VehicleDTO(null, VehicleType.CAR);
@@ -97,7 +125,11 @@ public class VehicleControllerTest {
                 .andExpect(jsonPath("$.vehicleType").value("CAR"));
     }
 
-
+    /**
+     * Tests that deleting a vehicle returns a success message.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testDeleteVehicle() throws Exception {
         mvc.perform(delete("/api/vehicle/13"))

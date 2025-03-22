@@ -23,6 +23,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
+/**
+ * Unit tests for ConditionsController that test REST endpoints.
+ */
 @WebMvcTest(ConditionsController.class)
 public class ConditionsControllerTest {
     @Autowired
@@ -34,6 +37,11 @@ public class ConditionsControllerTest {
     @MockitoBean
     private ConditionsService conditionsService;
 
+    /**
+     * Tests that when there is no conditions, controller returns empty JSON.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testGetAllConditions_Empty() throws Exception {
         when(conditionsService.getAll()).thenReturn(Collections.emptyList());
@@ -43,6 +51,11 @@ public class ConditionsControllerTest {
                 .andExpect(content().json("[]"));
     }
 
+    /**
+     * Tests that retrieving all conditions returns the expected list.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testGetAllConditions() throws Exception {
         ConditionsDTO conditionsDTO = new ConditionsDTO(1L, 2L, ConditionType.TEMPERATURE, -10.0, 0.0, null, 0.5, false);
@@ -54,6 +67,11 @@ public class ConditionsControllerTest {
                 .andExpect(jsonPath("$[0].conditionType").value("TEMPERATURE"));
     }
 
+    /**
+     * Tests that a new conditions is created.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testCreateConditions() throws Exception {
         ConditionsDTO requestDTO = new ConditionsDTO(null, 3L, ConditionType.WIND, 10.0, 20.0, null, 0.5, false);
@@ -70,6 +88,11 @@ public class ConditionsControllerTest {
 
     }
 
+    /**
+     * Tests retrieving a condition by id.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testGetConditionsById() throws Exception {
         ConditionsDTO conditionsDTO = new ConditionsDTO(22L, 2L, ConditionType.WIND, 10.0, 20.0, null, 0.5, false);
@@ -81,6 +104,11 @@ public class ConditionsControllerTest {
                 .andExpect(jsonPath("$.conditionType").value("WIND"));
     }
 
+    /**
+     * Tests updating an existing condition.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testUpdateConditions() throws Exception{
         ConditionsDTO requestDTO = new ConditionsDTO(null, 3L, ConditionType.PHENOMENON, null, null, "Rain", 0.5, false);
@@ -97,6 +125,11 @@ public class ConditionsControllerTest {
     }
 
 
+    /**
+     * Tests that deleting a condition returns a success message.
+     *
+     * @throws Exception if an error occurs during the request.
+     */
     @Test
     void testDeleteConditions() throws Exception {
         mvc.perform(delete("/api/conditions/13"))

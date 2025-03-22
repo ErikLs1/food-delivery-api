@@ -26,6 +26,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
+/**
+ * Unit tests with focus on car delivery fee calculation.
+ */
 @ExtendWith(MockitoExtension.class)
 public class CarDeliveryFeeServiceTest {
 
@@ -45,7 +48,9 @@ public class CarDeliveryFeeServiceTest {
     private BaseFee baseFee;
     private LocalDateTime observationTime;
 
-
+    /**
+     * Common data set up before each test.
+     */
     @BeforeEach
     void  setUp() {
         observationTime = LocalDateTime.now();
@@ -59,6 +64,12 @@ public class CarDeliveryFeeServiceTest {
         baseFee.setVehicleFee(4.00);
     }
 
+    /**
+     *  Test calculation of delivery for a car when observations time is provided.
+     *
+     * @param cityName the city name.
+     * @param expectedFee the fee associated with the city.
+     */
     @ParameterizedTest
     @CsvSource({
             "Tallinn, 4.00",
@@ -85,6 +96,12 @@ public class CarDeliveryFeeServiceTest {
         assertEquals(expectedFee, totalFee);
     }
 
+    /**
+     *  Test calculation of delivery for a car when observations time is not provided.
+     *
+     * @param cityName the city name.
+     * @param expectedFee the fee associated with the city.
+     */
     @ParameterizedTest
     @CsvSource({
             "Tallinn, 4.00",
@@ -111,6 +128,9 @@ public class CarDeliveryFeeServiceTest {
         assertEquals(expectedFee, totalFee);
     }
 
+    /**
+     * Tests that {@link WeatherDataNotFoundException} is thrown when weather data was not found.
+     */
     @Test
     void testCalculateDeliveryFeeForCar_NoWeatherData_TimeNotProvided() {
         String cityName = "Tallinn";
